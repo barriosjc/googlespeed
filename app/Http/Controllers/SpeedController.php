@@ -42,7 +42,7 @@ class SpeedController extends Controller
 
 
             // return view('speed.inputs', compact('data'));
-            return response()->json($data['lighthouseResult']);
+            return response()->json($data['lighthouseResult']['categories']);
     
         } catch (\Exception $e) {
             return response()->json(['error' => 'Unable to fetch data', 'message' => $e->getMessage()], 500);
