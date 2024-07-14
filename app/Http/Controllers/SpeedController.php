@@ -19,6 +19,7 @@ class SpeedController extends Controller
 
     public function getApiData(Request $request)
     {
+
         $client = new Client();
         $apiToken = env("API_TOKEN");
         $url = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed";
@@ -82,7 +83,7 @@ class SpeedController extends Controller
         $categories = Category::all();
         $strategies = Strategy::all();
         $query = MetricHistoryRun::query();
-// dd($request);
+
         if ($request->has('categories') ) {
             foreach ($request->categories as  $value) {
                 $query->where(strtolower($value)."_metric", '>', 0);

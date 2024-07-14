@@ -9,21 +9,66 @@ var metricsData = {
     _token: ""
 };
 
-document.addEventListener('DOMContentLoaded', function () 
-{
-    const form = document.getElementById('metricsForm');
+document.addEventListener('DOMContentLoaded', function () {
+    // const form = document.getElementById('metricsForm')[0];
     const submitBtn = document.getElementById('submitInputs');
     const submitMetrics = document.getElementById('submitMetrics');
     const token = document.querySelector('input[name="_token"]').value;
 
     submitBtn.addEventListener('click', function () {
         //validar ingreso de form
+        var form = $('#metricsForm')[0];
+        var urlInput = $('#url');
+        var errorSpanUrl = $('#urlErr');
+        var categoryCheckboxes = $('input[name="categories[]"]');
+        var errorSpanCate = $('#cateErr');
+        var strategySelect = $('#strategy');
+        var errorSpanStra = $('#straErr');
+        var hasCategorySelected = categoryCheckboxes.is(':checked');
+        var hasStrategySelected = strategySelect.val() !== '';
+
+
+        //validaciones
+        var urlPattern = /^(https?:\/\/)/;
+        if (!urlPattern.test(urlInput.val())) {
+            errorSpanUrl.text('Por favor, ingrese una URL válida que comience con http:// o https://.');
+            urlInput.addClass('is-invalid');
+            return;
+        } else {
+            errorSpanUrl.text('');
+            urlInput.removeClass('is-invalid');
+        }
+
+        // Validar las categorías
+        if (!hasCategorySelected) {
+            errorSpanCate.text('Por favor, seleccione al menos una categoría.');
+            isValid = false;
+        }
+
+        // Validar la estrategia
+        if (!hasStrategySelected) {
+            strategySelect.addClass('is-invalid');
+            errorSpanStra.text('Por favor, seleccione una estrategia.');
+            isValid = false;
+        } else {
+            strategySelect.removeClass('is-invalid');
+        }
+
+        // Validar el formulario usando la API de Validación de Constraint de HTML5
+        if (form.checkValidity() === false) {
+            $(form).addClass('was-validated');
+            return;
+        }
+
+        //borro el msg del boton guardar en ddbb
+        // msgSave = document.getElementById("saveMsg");
+        // msgSave.text('');
         //bloqueo de form
-        $.blockUI({ message: '<h1><img src="http://localhost:8000/img/loading.gif" style="width: 30px;" > Just a moment...</h1>' });
+        callBlockUI();
         const url = document.getElementById('url').value;
         const strategy = document.getElementById('strategy').value;
         const categories = Array.from(document.querySelectorAll('input[name="categories[]"]:checked'))
-                                .map(checkbox => checkbox.value);
+            .map(checkbox => checkbox.value);
 
         const data = {
             url: url,
@@ -35,8 +80,9 @@ document.addEventListener('DOMContentLoaded', function ()
         metricsData.url = url;
         metricsData.strategy = strategy;
         metricsData.token = token;
+        urlPost = "/api/data"
 
-        fetch(form.action, {
+        fetch(urlPost, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -44,25 +90,30 @@ document.addEventListener('DOMContentLoaded', function ()
             },
             body: JSON.stringify(data)
         })
-        .then(response => 
-            response.json())
+            .then(response =>
+                response.json())
 
-        .then(data => {
-            drawRectangles(data);
-            $.unblockUI();
-            document.getElementById('opcionesMetricas').setAttribute('style', '')
-        })
-        
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+            .then(data => {
+                drawRectangles(data);
+                $.unblockUI();
+                document.getElementById('opcionesMetricas').setAttribute('style', '');
+                btnSaveMetri = document.getElementById("submitMetrics");
+                btnSaveMetri.setAttribute('style', '');
+                msgSave = document.getElementById("saveMsg");
+                msgSave.style.display = "none";
+            })
+
+            .catch((error) => {
+                $.unblockUI();
+                console.error('Error:', error);
+            });
     });
 
     //guada los valores de metricas
     submitMetrics.addEventListener('click', function () {
         //validar ingreso de form
         //bloqueo de form
-        $.blockUI({ message: '<h1><img src="busy.gif" /> Just a moment...</h1>' });
+        callBlockUI();
         const url = document.getElementById('url').value;
         const strategy = document.getElementById('strategy').value;;
         const urlPost = "/metrics/save";
@@ -77,83 +128,69 @@ document.addEventListener('DOMContentLoaded', function ()
             },
             body: JSON.stringify(data)
         })
-        .then(response => 
-            response.json())
+            .then(response =>
+                response.json())
 
-        .then(data => {
-            console.log(data);
-            $.unblockUI();
-        })
-        
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+            .then(data => {
+                console.log(data);
+                $.unblockUI();
+                btnSaveMetri = document.getElementById("submitMetrics");
+                btnSaveMetri.style.display = "none";
+                msgSave = document.getElementById("saveMsg");
+                msgSave.setAttribute('style', '');
+            })
+
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     });
 
     function drawRectangles(data) {
         // console.log("entra a dibular");
         const resultsContainer = document.getElementById('resultsContainer');
-        resultsContainer.innerHTML = ''; 
-  
-        if(data.hasOwnProperty("accessibility")) {
+        resultsContainer.innerHTML = '';
+
+        if (data.hasOwnProperty("accessibility")) {
             item = data.accessibility;
             drawBox(item);
             metricsData.accessibility = item.score;
         };
-        if(data.hasOwnProperty("pwa")) {
+        if (data.hasOwnProperty("pwa")) {
             item = data.pwa;
             drawBox(item);
             metricsData.pwa = item.score;
         };
-        if(data.hasOwnProperty("seo")) {
+        if (data.hasOwnProperty("seo")) {
             item = data.seo;
             drawBox(item);
             metricsData.seo = item.score;
         };
-        if(data.hasOwnProperty("performance")) {
+        if (data.hasOwnProperty("performance")) {
             item = data.performance;
             drawBox(item);
             metricsData.performance = item.score;
         };
-        if(data.hasOwnProperty("best-practices")) {
+        if (data.hasOwnProperty("best-practices")) {
             item = data["best-practices"];
             drawBox(item);
             metricsData.bestpractices = item.score;
         };
-    } 
+    }
 
 
     function drawBox(item) {
-        // Crear un contenedor para la tarjeta con clase Bootstrap 'col-md-2'
+        var template = document.getElementById("templmetrics").innerHTML;
+        // Crear un contenedor'
         const col = document.createElement('div');
         col.classList.add('col-md-2', 'mb-3');
+        col.innerHTML = template
 
-        // Crear el contenedor de la tarjeta con clase Bootstrap 'card'
-        const card = document.createElement('div');
-        card.classList.add('card', 'text-center');
-        card.style.width = '100%';
+        col.getElementsByClassName("t-metric-title")[0].innerHTML = item.title;
+        col.getElementsByClassName("t-metric-value-desc")[0].innerHTML = item.score;
+        col.getElementsByClassName("t-metric-value")[0].setAttribute("style", "width:" + (item.score * 100) + "%");
 
-        // Crear el encabezado de la tarjeta con clase Bootstrap 'card-header'
-        const cardHeader = document.createElement('div');
-        cardHeader.classList.add('card-header');
-        cardHeader.textContent = item.title;
-        card.appendChild(cardHeader);
-
-        // Crear el cuerpo de la tarjeta con clase Bootstrap 'card-body'
-        const cardBody = document.createElement('div');
-        cardBody.classList.add('card-body');
-        card.appendChild(cardBody);
-
-        // Crear el contenido del cuerpo de la tarjeta con clase Bootstrap 'card-title'
-        const cardText = document.createElement('h3');
-        cardText.classList.add('font-weight-bold', 'text-center', 'text-primary');
-        cardText.style.fontWeight = 'bold';
-        cardText.textContent = item.score;
-        cardBody.appendChild(cardText);
-
-        // Obtener el contenedor de resultados con clase 'row'
         const resultsRow = document.querySelector('.results-row');
-        
+
         // Verificar si ya existe un contenedor de 'row', si no, crear uno
         if (!resultsRow) {
             const newRow = document.createElement('div');
@@ -163,9 +200,15 @@ document.addEventListener('DOMContentLoaded', function ()
 
         // Añadir la tarjeta al contenedor de columna dentro de la fila
         const resultsContainer = document.querySelector('.results-row');
-        col.appendChild(card);
         resultsContainer.appendChild(col);
     }
 
-    
+    function callBlockUI() {
+        $.blockUI.defaults.css = {};
+        var messageHTML = `<div>
+                                <h1><div class="lds-dual-ring"></div> Just a moment...</h1>
+                            </div>`
+        $.blockUI({ message: messageHTML });
+
+    }
 });

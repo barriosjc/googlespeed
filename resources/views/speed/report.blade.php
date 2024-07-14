@@ -3,7 +3,7 @@
 @section('contenido')
     {{-- <link rel="stylesheet" href="{{ asset('css/forms.css') }}"> --}}
 
-    <div class="card">
+    <div class="card shadow">
         <div class="card-header">
             List of Métrics
         </div>
@@ -39,7 +39,7 @@
                     </div>
 
                     <div class="form-group col-md-2 d-flex align-items-end">
-                        <button id="submitInputs" class="btn btn-primary" type="submit">Get Métrics</button>
+                        <button id="submitInputs" class="btn btn-primary" type="submit">Get Metrics</button>
                     </div>
                 </div>
             </form>
@@ -81,9 +81,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Incluir Select2 JS al final del contenido -->
-        <script src="{{ asset('vendor/select2/select2/dist/js/select2.min.js') }}"></script>
 
         <script>
             $(document).ready(function() {
