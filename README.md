@@ -17,11 +17,11 @@ cd googlespeed
 composer install
 cp .env_prod .env
 
-
 cree la ddbb:
-En MySql ejecutar estos comandos.
+En MySQL ejecutar estos comandos.
 CREATE DATABASE googlespeed;
 use googlespeed;
+
 
 crear usuario y permisos:
 CREATE USER 'broobe'@'localhost' IDENTIFIED BY 'broobe';
