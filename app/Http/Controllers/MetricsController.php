@@ -8,7 +8,7 @@ use App\Models\Strategy;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
-class SpeedController extends Controller
+class MetricsController extends Controller
 {
     public function index(){
         $strategies = Strategy::orderBy("name","desc")->get();
@@ -19,7 +19,6 @@ class SpeedController extends Controller
 
     public function getApiData(Request $request)
     {
-
         $client = new Client();
         $apiToken = env("API_TOKEN");
         $url = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed";
@@ -48,8 +47,8 @@ class SpeedController extends Controller
         }
     }
     
-    public function metrics_save(Request $request) {
-        
+    public function metrics_save(Request $request) 
+    {
         try {
             $strategy_id = Strategy::where('name', $request->strategy)->first()->id;
             $mhr = new MetricHistoryRun;
@@ -98,7 +97,7 @@ class SpeedController extends Controller
     
         $mhr = $query->orderBy('url', 'asc')
                      ->orderBy('created_at', 'asc')
-                     ->get();
+                     ->paginate(5);
   
         return view("speed.report", compact('strategies', 'categories', 'mhr')) ;
     }

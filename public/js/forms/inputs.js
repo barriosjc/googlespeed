@@ -60,9 +60,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        //borro el msg del boton guardar en ddbb
-        // msgSave = document.getElementById("saveMsg");
-        // msgSave.text('');
         //bloqueo de form
         callBlockUI();
         const url = document.getElementById('url').value;

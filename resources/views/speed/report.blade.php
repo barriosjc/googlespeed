@@ -8,7 +8,7 @@
             List of Métrics
         </div>
         <div class="card-body">
-            <form id="reportForm" action="{{ route('listados.generar') }}" method='POST'>
+            <form id="reportForm" action="{{ route('listados.generar') }}" method='GET'>
                 @csrf
 
                 <div class="form-row">
@@ -49,7 +49,7 @@
 
                     <!-- Tabla -->
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered">
+                        <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>URL</th>
@@ -75,8 +75,16 @@
                                         <td>{{ $item->datetime }}</td>
                                     </tr>
                                 @endforeach
+                                @if(empty($mhr))
+                                    <td colspan="8">Sin datos a mostrar</td>
+                                @endif
                             </tbody>
                         </table>
+                        @if(!empty($mhr))
+                            <div class="d-flex justify-content-center">
+                                {!! $mhr->links('pagination::bootstrap-4') !!}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
