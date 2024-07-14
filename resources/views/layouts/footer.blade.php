@@ -1,5 +1,5 @@
-<footer class="footer">
-    <div class="container">
+<footer class="footer bg-light py-3 mt-auto">
+    <div class="container text-center">
         Broobe challenge - 2024
     </div>
 </footer>

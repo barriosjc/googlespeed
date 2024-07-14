@@ -1,11 +1,11 @@
-<header class="header">
-    <div class="container">
+<header class="header bg-light py-3">
+    <div class="container d-flex justify-content-between align-items-center">
         <div class="logo">
-            <img class="header-image" alt="BROOBE" src="{{asset('img/challenge.png')}}">
+            <img class="header-image img-fluid" alt="BROOBE" src="{{ asset('img/challenge.png') }}" style="max-height: 50px;">
         </div>
         <nav class="nav">
-            <a href="{{route('obtener.metricas')}}">Obtener métricas</a>
-            <a href="{{route('listados.filtro')}}">Listado</a>
+            <a class="nav-link" href="{{ route('obtener.metricas') }}">Get Métricas</a>
+            <a class="nav-link" href="{{ route('listados.filtro') }}">Listado</a>
         </nav>
     </div>
 </header>

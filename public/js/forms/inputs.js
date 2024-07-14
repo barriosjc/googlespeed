@@ -1,7 +1,7 @@
 var metricsData = {
     url: "",
     strategy: "",
-    accesibility: "",
+    accessibility: "",
     pwa: "",
     seo: "",
     performance: "",
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function ()
         if(data.hasOwnProperty("accessibility")) {
             item = data.accessibility;
             drawBox(item);
-            metricsData.accesibility = item.score;
+            metricsData.accessibility = item.score;
         };
         if(data.hasOwnProperty("pwa")) {
             item = data.pwa;
@@ -122,23 +122,50 @@ document.addEventListener('DOMContentLoaded', function ()
         };
     } 
 
+
     function drawBox(item) {
-        const rectangle = document.createElement('div');
-        rectangle.classList.add('rectangle');
-        rectangle.style.width = '100px';
-        rectangle.style.height = '100px';
-        rectangle.style.border = '1px solid black';
-        rectangle.style.display = 'inline-block';
-        rectangle.style.margin = '10px';
+        // Crear un contenedor para la tarjeta con clase Bootstrap 'col-md-2'
+        const col = document.createElement('div');
+        col.classList.add('col-md-2', 'mb-3');
 
-        const value = document.createElement('div');
-        value.textContent = item.title;
-        rectangle.appendChild(value);
+        // Crear el contenedor de la tarjeta con clase Bootstrap 'card'
+        const card = document.createElement('div');
+        card.classList.add('card', 'text-center');
+        card.style.width = '100%';
 
-        const text = document.createElement('div');
-        text.textContent = item.score;
-        rectangle.appendChild(text);
+        // Crear el encabezado de la tarjeta con clase Bootstrap 'card-header'
+        const cardHeader = document.createElement('div');
+        cardHeader.classList.add('card-header');
+        cardHeader.textContent = item.title;
+        card.appendChild(cardHeader);
 
-        resultsContainer.appendChild(rectangle);
+        // Crear el cuerpo de la tarjeta con clase Bootstrap 'card-body'
+        const cardBody = document.createElement('div');
+        cardBody.classList.add('card-body');
+        card.appendChild(cardBody);
+
+        // Crear el contenido del cuerpo de la tarjeta con clase Bootstrap 'card-title'
+        const cardText = document.createElement('h3');
+        cardText.classList.add('font-weight-bold', 'text-center', 'text-primary');
+        cardText.style.fontWeight = 'bold';
+        cardText.textContent = item.score;
+        cardBody.appendChild(cardText);
+
+        // Obtener el contenedor de resultados con clase 'row'
+        const resultsRow = document.querySelector('.results-row');
+        
+        // Verificar si ya existe un contenedor de 'row', si no, crear uno
+        if (!resultsRow) {
+            const newRow = document.createElement('div');
+            newRow.classList.add('row', 'results-row');
+            document.getElementById('resultsContainer').appendChild(newRow);
+        }
+
+        // Añadir la tarjeta al contenedor de columna dentro de la fila
+        const resultsContainer = document.querySelector('.results-row');
+        col.appendChild(card);
+        resultsContainer.appendChild(col);
     }
+
+    
 });

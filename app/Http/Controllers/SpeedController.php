@@ -53,7 +53,7 @@ class SpeedController extends Controller
             $strategy_id = Strategy::where('name', $request->strategy)->first()->id;
             $mhr = new MetricHistoryRun;
             $mhr->url = $request->url;
-            $mhr->accesibility_metric = $request->accesibility ?? 0 ;
+            $mhr->accessibility_metric = $request->accessibility ?? 0 ;
             $mhr->pwa_metric = $request->pwa ?? 0;
             $mhr->performance_metric = $request->performance ?? 0;
             $mhr->seo_metric = $request->seo ?? 0;
@@ -82,11 +82,16 @@ class SpeedController extends Controller
         $categories = Category::all();
         $strategies = Strategy::all();
         $query = MetricHistoryRun::query();
-
+// dd($request);
+        if ($request->has('categories') ) {
+            foreach ($request->categories as  $value) {
+                $query->where(strtolower($value)."_metric", '>', 0);
+            }
+        }
         if ($request->has('url') && !empty($request->url)) {
             $query->where('url', '=', $request->url);
         }
-        if ($request->has('strategy_id') ) {
+        if ($request->has('strategy_id') && !empty($request->strategy_id)) {
             $query->where('strategy_id', '=', $request->strategy_id);
         }
     

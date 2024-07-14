@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('metric_history_runs', function (Blueprint $table) {
             $table->id();
             $table->string('url');
-            $table->float('accesibility_metric');
+            $table->float('accessibility_metric');
             $table->float('pwa_metric');
             $table->float('performance_metric');
             $table->float('seo_metric');
