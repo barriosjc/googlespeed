@@ -37,5 +37,12 @@
             <button id="submitInputs" type="button">Obtener Métricas</button>
         </div>
     </form>
-    <script src="{{ asset('js/forms/inputs.js') }}"></script>
+
+    <div id="resultsContainer" class="results-container"></div>
+    <div id="opcionesMetricas"class="form-group" style="display:none">
+        <button id="submitMetrics" type="button">Guardar métricas</button>
+    </div>
+
+    <script src="{{ asset('js/forms/inputs.js?v=01') }}"></script>
+    
 @endsection

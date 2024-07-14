@@ -20,7 +20,7 @@ class SpeedController extends Controller
     public function getApiData(Request $request)
     {
         $client = new Client();
-        $apiToken = "AIzaSyDCrPAzhzWxZbJxPYIEURODTvBFVVRNHbY";
+        $apiToken = env("API_TOKEN");
         $url = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed";
         $url = $url . "?url=" . $request->url;
         $url = $url . "&key=" . $apiToken;
@@ -40,8 +40,6 @@ class SpeedController extends Controller
     
             $data = json_decode($response->getBody(), true);
 
-
-            // return view('speed.inputs', compact('data'));
             return response()->json($data['lighthouseResult']['categories']);
     
         } catch (\Exception $e) {
@@ -49,4 +47,53 @@ class SpeedController extends Controller
         }
     }
     
+    public function metrics_save(Request $request) {
+        
+        try {
+            $strategy_id = Strategy::where('name', $request->strategy)->first()->id;
+            $mhr = new MetricHistoryRun;
+            $mhr->url = $request->url;
+            $mhr->accesibility_metric = $request->accesibility ?? 0 ;
+            $mhr->pwa_metric = $request->pwa ?? 0;
+            $mhr->performance_metric = $request->performance ?? 0;
+            $mhr->seo_metric = $request->seo ?? 0;
+            $mhr->best_practices_metric = $request->bestpractices ?? 0;
+            $mhr->strategy_id = $strategy_id;
+            $mhr->save();
+
+            return response()->json(['success' => 'Se guardaron correctamento los datos']);
+    
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Unable to fetch data', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function list_filtro() 
+    {
+        $mhr = [];
+        $categories = Category::all();
+        $strategies = Strategy::all();
+        
+        return view("speed.report", compact('strategies', 'categories', 'mhr')) ;
+    }
+
+    public function list_generar(Request $request) 
+    {
+        $categories = Category::all();
+        $strategies = Strategy::all();
+        $query = MetricHistoryRun::query();
+
+        if ($request->has('url') && !empty($request->url)) {
+            $query->where('url', '=', $request->url);
+        }
+        if ($request->has('strategy_id') ) {
+            $query->where('strategy_id', '=', $request->strategy_id);
+        }
+    
+        $mhr = $query->orderBy('url', 'asc')
+                     ->orderBy('created_at', 'asc')
+                     ->get();
+  
+        return view("speed.report", compact('strategies', 'categories', 'mhr')) ;
+    }
 }
