@@ -1,11 +1,11 @@
 # Challenge Broobe
 
-Este proyecto permite obtener valores de distintas metricas de Google Speed como ser:
-ACCESSIBILITY
-BEST_PRACTICES 
-PERFORMANCE 
-PWA 
-SEO
+Este proyecto permite obtener y guardar valores de distintas metricas de Google Speed como ser:
+- ACCESSIBILITY
+- BEST_PRACTICES 
+- PERFORMANCE 
+- PWA 
+- SEO
 
 ## Puesta en marcha
 
