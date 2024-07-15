@@ -64,9 +64,11 @@ Categories (Seleccione las categorias de las que quiera obtener información, de
 Strategy (Seleccione una estrategia, debe seleccionar uno)
 
 - [](#)Luego haga click en -> Get Metrics
-Luego de procesar el sistema mostrará las métricas seleccionadas y sus valores
+  
+Luego de procesar el sistema mostrará las métricas seleccionadas y sus valores.
 Se habilita un botón que permite guardar las métricas.
 
 - [](#)Listados
+  
 Puede ingresar ingresar o seleccionar datos a filtrar, todos los datos son opcionales.
 
