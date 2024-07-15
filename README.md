@@ -12,21 +12,21 @@ Este proyecto permite obtener y guardar valores de distintas metricas de Google 
 
 - [Pasos](#Pasos)
 - [](#)Poner disponible proyecto:
-Desde la terminal, ingresar a carpeta destino de proyectos.
+  Desde la terminal, ingresar a carpeta destino de proyectos.
   git clone https://github.com/barriosjc/googlespeed.git
   cd googlespeed
   composer install
   cp .env_prod .env
 
 - [](#)cree la ddbb:
-En MySQL ejecutar estos comandos.
-CREATE DATABASE googlespeed;
-use googlespeed;
+  En MySQL ejecutar estos comandos.
+  CREATE DATABASE googlespeed;
+  use googlespeed;
 
 
 - [](#)crear usuario y permisos:
-CREATE USER 'broobe'@'localhost' IDENTIFIED BY 'broobe';
-GRANT ALL PRIVILEGES ON googlespeed.* TO 'broobe'@'localhost' WITH GRANT OPTION;
+  CREATE USER 'broobe'@'localhost' IDENTIFIED BY 'broobe';
+  GRANT ALL PRIVILEGES ON googlespeed.* TO 'broobe'@'localhost' WITH GRANT OPTION;
 
 - [](#)FLUSH PRIVILEGES;
 
