@@ -13,9 +13,13 @@ Este proyecto permite obtener y guardar valores de distintas metricas de Google 
 - [Pasos](#Pasos)
 - [](#)Poner disponible proyecto:
   Desde la terminal, ingresar a carpeta destino de proyectos.
+
   git clone https://github.com/barriosjc/googlespeed.git
+
   cd googlespeed
+
   composer install
+
   cp .env_prod .env
 
 - [](#)cree la ddbb:
